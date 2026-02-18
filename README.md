@@ -6,6 +6,7 @@ This repository contains comprehensive, beginner-friendly walkthroughs for the *
 - **Beginner-Friendly:** Detailed explanations of *why* commands are used, not just *what* to type.
 - **Step-by-Step:** Clear instructions for solving each level.
 - **Visuals:** Includes simulated terminal screenshots for context.
+- **Dependency-Free:** No external tools required just to read; all screenshots are pre-generated.
 - **Topics Covered:** Linux basics, file manipulation, networking (SSH, SSL, Netcat), permissions, cron jobs, and Git.
 
 ## 📚 Walkthrough Parts

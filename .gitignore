@@ -1,8 +1,8 @@
 # System Files
 .DS_Store
 
-# Environment Variables
-.env
+# Version Control
+.gitignore
 
 # Python Cache & Logs
 __pycache__/
