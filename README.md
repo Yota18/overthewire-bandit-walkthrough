@@ -1,51 +1,40 @@
-# 🚩 OverTheWire: Bandit Wargame Writeups
+# Bandit Wargame Walkthrough (Level 0 - 31)
 
-![Bandit Wargame](https://overthewire.org/wargames/bandit/bandit.png)
+This repository contains comprehensive, beginner-friendly walkthroughs for the **Bandit** wargame from [OverTheWire](https://overthewire.org/wargames/bandit/).
 
-This repository contains **comprehensive documentation** and **step-by-step walkthroughs** for solving the **Bandit** wargame challenges from [OverTheWire](https://overthewire.org/wargames/bandit/).
+## 🌟 Features
+- **Beginner-Friendly:** Detailed explanations of *why* commands are used, not just *what* to type.
+- **Step-by-Step:** Clear instructions for solving each level.
+- **Visuals:** Includes simulated terminal screenshots for context.
+- **Topics Covered:** Linux basics, file manipulation, networking (SSH, SSL, Netcat), permissions, cron jobs, and Git.
 
-This guide covers solutions from **Level 0 to Level 31**, systematically organized to help beginners understand basic Linux commands, network security, and fundamental exploitation techniques.
+## 📚 Walkthrough Parts
 
----
+The guide is split into three parts for easier reading:
 
-## 📚 Table of Contents
+### [Part 1: Level 0 - 10](Bandit_Walkthrough_Part1.md)
+**Focus:** Linux Basics & File Handling
+- SSH Login (`ssh -p`)
+- File commands (`ls`, `cat`, `cd`, `file`)
+- Handling special filenames (spaces, dashes)
+- Searching files (`find`, `grep`)
 
-The walkthrough is divided into three parts:
-- **Part 1**: [Level 0 - 10](Bandit_Walkthrough_Part1.md) (Linux Basics & File Handling)
-- **Part 2**: [Level 11 - 20](Bandit_Walkthrough_Part2.md) (Compression, Networking, & Permissions)
-- **Part 3**: [Level 21 - 31](Bandit_Walkthrough_Part3.md) (Cron Jobs, Shell Escaping, & Git)
+### [Part 2: Level 11 - 20](Bandit_Walkthrough_Part2.md)
+**Focus:** Compression, Networking, & Permissions
+- Text manipulation (`tr`)
+- Decompression (`gzip`, `bzip2`, `tar`)
+- Networking tools (`nc`, `openssl`, `nmap`)
+- SSH Keys & Permissions (`chmod`)
 
----
-
-## 🛠️ What You Will Learn
-
-By solving these challenges, you will learn various Linux concepts and tools, including:
-
-- **File System Navigation**: `ls`, `cd`, `cat`, `file`, `du`, `find`
-- **Text Manipulation**: `grep`, `sort`, `uniq`, `strings`, `base64`, `tr`
-- **Compression & Archiving**: `gzip`, `bzip2`, `tar`, `xxd`
-- **Networking**: `ssh`, `nc` (netcat), `openssl`, `nmap`
-- **System Administration**: `cron`, `crontab`, `permissions` (chmod, chown, setuid)
-- **Version Control**: `git` (clone, log, branch, tag)
-- **Scripting**: Basic Bash scripting & Python
-
----
+### [Part 3: Level 21 - 31](Bandit_Walkthrough_Part3.md)
+**Focus:** Cron Jobs, Shell Escaping, & Git
+- Analyzing Cron jobs (`/etc/cron.d`)
+- Shell scripting (`bash`)
+- Escaping restricted shells (`vi`, `more`)
+- Git operations (`clone`, `log`, `branch`, `tag`)
 
 ## ⚠️ Disclaimer
-
-This documentation is created for **educational purposes**. Do not use this knowledge for illegal activities or to damage others' systems. The passwords shown here are part of a public wargame provided for learning.
-
----
-
-### How to Use This Repository
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/bandit-writeups.git
-    cd bandit-writeups
-    ```
-2.  Open the markdown files (`.md`) using your favorite text editor (VS Code, Obsidian, Typora) or read them directly on GitHub.
+These writeups are for **educational purposes only**. The goal is to learn Linux and security concepts. Please try to solve the levels yourself before consulting the solutions!
 
 ---
-
-*Happy Hacking!* 🕵️‍♂️💻
+**Happy Hacking!**

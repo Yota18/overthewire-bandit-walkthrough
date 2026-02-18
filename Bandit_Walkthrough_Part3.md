@@ -1,28 +1,36 @@
+# Bandit Wargame Walkthrough (Level 21 - 31)
+
+This final part covers advanced topics like Cron jobs, shell scripting, and Git version control.
+
 ## Level 21 -> 22
 
 ![Level 21 Output](images/bandit21_step.png)
 
 ### Goal
-The password for the next level can be obtained by examining a running cron job.
+The password is run by a **cron job** (a task scheduler). We need to find what command it runs.
 
 ### Steps
-1.  Check the `/etc/cron.d/` directory.
+1.  Cron jobs are usually stored in `/etc/cron.d/`.
     ```bash
     ls /etc/cron.d/
     ```
-2.  Read the file `cronjob_bandit22`. It points to the script `/usr/bin/cronjob_bandit22.sh`.
+2.  Read the relevant file: `cronjob_bandit22`.
+    ```bash
+    cat /etc/cron.d/cronjob_bandit22
+    ```
+3.  It points to a script: `/usr/bin/cronjob_bandit22.sh`. Read it:
     ```bash
     cat /usr/bin/cronjob_bandit22.sh
     ```
-3.  The script copies the password to a temporary file in `/tmp`. Read that file.
+4.  The script copies the password from `/etc/bandit_pass/bandit22` to a temporary file in `/tmp`.
+5.  Read that temp file:
     ```bash
     cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
     ```
-4.  Password obtained: `tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q`
+6.  **Password found:** `tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q`
 
-### Command Explanation
-*   `cron`: Daemon to execute scheduled commands.
-*   `/etc/cron.d`: Directory for cron job configuration files.
+### Beginner Tip: Cron
+Cron is a Linux utility that runs commands automatically at specified times. It's often used for backups and maintenance.
 
 ---
 
@@ -31,27 +39,22 @@ The password for the next level can be obtained by examining a running cron job.
 ![Level 22 Output](images/bandit22_step.png)
 
 ### Goal
-The password is stored in a temporary file whose name is generated from the MD5 hash of the target username.
+Similar to the previous level, but the filename is generated dynamically using an MD5 hash of the username.
 
 ### Steps
-1.  Check `cronjob_bandit23` and read its script `/usr/bin/cronjob_bandit23.sh`.
-2.  The script uses the command:
+1.  Read the cron job for `bandit23`: `/etc/cron.d/cronjob_bandit23`.
+2.  Read the script: `/usr/bin/cronjob_bandit23.sh`.
     ```bash
-    echo I am user $myname | md5sum | cut -d ' ' -f 1
+    cat /usr/bin/cronjob_bandit23.sh
     ```
-3.  We need to know the filename for user `bandit23`.
+3.  The script uses the command: `echo I am user $myname | md5sum`.
+4.  We need to simulate this for user `bandit23`:
     ```bash
     echo I am user bandit23 | md5sum | cut -d ' ' -f 1
     ```
-4.  The hash result is `8ca319486bfbbc3663ea0fbe81326349`.
-5.  Read the password file at `/tmp/HASH_RESULT`.
-    ```bash
-    cat /tmp/8ca319486bfbbc3663ea0fbe81326349
-    ```
-6.  Password obtained: `0Zf11ioIjMVN551jX3CmStKLYqjk54Ga`
-
-### Command Explanation
-*   `md5sum`: Computes MD5 hash.
+5.  The result is `8ca319486bfbbc3663ea0fbe81326349`.
+6.  The password file is at `/tmp/8ca319486bfbbc3663ea0fbe81326349`. Read it.
+7.  **Password found:** `0Zf11ioIjMVN551jX3CmStKLYqjk54Ga`
 
 ---
 
@@ -60,33 +63,34 @@ The password is stored in a temporary file whose name is generated from the MD5 
 ![Level 23 Output](images/bandit23_step.png)
 
 ### Goal
-The password is stored in `/etc/bandit_pass/bandit24`. We need to create our own script that will be executed by the `bandit24` cron job.
+Create your own shell script that the `bandit24` cron job will execute. Our script will copy the password to a place we can read.
 
 ### Steps
-1.  Create a working directory in `/tmp` (e.g., `/tmp/exploityoga`).
-2.  Create a script `copy.sh`:
+1.  Create a temporary directory:
     ```bash
-    #!/bin/bash
-    cat /etc/bandit_pass/bandit24 > /tmp/exploityoga/password
+    mkdir /tmp/myscript
+    cd /tmp/myscript
     ```
-3.  Give execution permissions and ensure the destination directory is writable (chmod 777).
+2.  Create a script named `copy.sh`:
+    ```bash
+    echo "#!/bin/bash" > copy.sh
+    echo "cat /etc/bandit_pass/bandit24 > /tmp/myscript/password" >> copy.sh
+    ```
+3.  **Crucial Step:** Give it execute permissions (`chmod 777`) so anyone can run it.
     ```bash
     chmod 777 copy.sh
-    chmod 777 /tmp/exploityoga
+    chmod 777 /tmp/myscript
     ```
-4.  Copy the script to `/var/spool/bandit24/foo`.
+4.  Copy the script to the folder where the cron job looks (`/var/spool/bandit24/foo`):
     ```bash
     cp copy.sh /var/spool/bandit24/foo/
     ```
-5.  Wait up to 1 minute for the cron job to run.
-6.  Check the file `/tmp/exploityoga/password`.
+5.  Wait for the cron job to run (up to 60 seconds).
+6.  Check your output file:
     ```bash
-    cat /tmp/exploityoga/password
+    cat /tmp/myscript/password
     ```
-7.  Password obtained: `gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8`
-
-### Command Explanation
-*   `/var/spool`: Directory for data awaiting processing (like cron jobs or mail).
+7.  **Password found:** `gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8`
 
 ---
 
@@ -95,22 +99,24 @@ The password is stored in `/etc/bandit_pass/bandit24`. We need to create our own
 ![Level 24 Output](images/bandit24_step.png)
 
 ### Goal
-The password is stored by a daemon listening on port 30002. The daemon asks for the `bandit24` password and a secret 4-digit PIN.
+A service on port 30002 requires the current password + a 4-digit PIN. We need to try all 10,000 combinations (0000-9999).
 
 ### Steps
-1.  We need to brute-force the PIN from 0000 to 9999.
-2.  Use a one-line bash script to send all possibilities.
+1.  Manually typing 10,000 PINs is impossible. Use a `for` loop in bash.
+2.  Write a one-line script:
     ```bash
     for i in {0000..9999}; do echo "gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8 $i"; done | nc localhost 30002
     ```
-3.  Filter the output to find the correct answer ("Correct!").
+    *This generates all combinations and pipes them to netcat.*
+3.  The output will be huge. Filter out the "Wrong" attempts:
     ```bash
-    ... | nc localhost 30002 | grep -v "Wrong"
+    ... | grep -v "Wrong"
     ```
-4.  Password obtained: `iCi86ttT4KSNe1armKiwbQNmB3YJP3q4`
+4.  **Password found:** `iCi86ttT4KSNe1armKiwbQNmB3YJP3q4`
 
 ### Command Explanation
-*   `for loop`: Loop to iterate through numbers.
+- `{0000..9999}`: Bash expansion that generates numbers from 0000 to 9999.
+- `grep -v`: Invert match (show lines that do **not** contain the pattern).
 
 ---
 
@@ -119,26 +125,24 @@ The password is stored by a daemon listening on port 30002. The daemon asks for 
 ![Level 25 Output](images/bandit25_step.png)
 
 ### Goal
-Login to `bandit25`. The shell is `/usr/bin/showtext`, which is restricted.
+Login to `bandit26`. The shell is restricted to standard input, but we can break out.
 
 ### Steps
-1.  Login to `bandit25`.
-2.  The `showtext` shell displays the content of `bandit26.sshkey` using `more`.
-3.  Resize your terminal window so the text doesn't fit on one screen, forcing `more` to pause and show `--More--`.
-4.  Press `v` to launch `vi`.
-5.  Inside `vi`, run commands to spawn a shell:
-    ```vim
-    :set shell=/bin/bash
-    :shell
+1.  Login with the private key:
+    ```bash
+    ssh -i bandit26.sshkey bandit26@localhost
     ```
-6.  Now you have a shell! Read the key file.
+2.  The shell forces you into `more` (a pager) to read a file.
+3.  Make your terminal window very small so the text doesn't fit. `more` will pause at the bottom.
+4.  Press `v` to open the visual editor (`vi` or `vim`).
+5.  In `vi`, you can run shell commands! Type `:set shell=/bin/bash` then press Enter.
+6.  Type `:shell` to launch a bash shell.
+7.  **Success!** You are now in a shell.
+8.  Read the key for the next level:
     ```bash
     cat bandit26.sshkey
     ```
-7.  Save this key to `bandit26.private` on your local machine and set permission `600`.
-
-### Command Explanation
-*   `vi`: Text editor that allows shell command execution.
+9.  Save this key to your local machine as `bandit26.private` (chmod 600).
 
 ---
 
@@ -147,22 +151,16 @@ Login to `bandit25`. The shell is `/usr/bin/showtext`, which is restricted.
 ![Level 26 Output](images/bandit26_step.png)
 
 ### Goal
-Login to `bandit26` and run the setuid binary `bandit27-do`. The shell is also restricted.
+Run a setuid binary `bandit27-do` to elevate privileges.
 
 ### Steps
-1.  Use the private key to login to `bandit26`.
-    ```bash
-    ssh -i bandit26.private bandit26@bandit.labs.overthewire.org -p 2220
-    ```
-2.  Immediately after login, the shell runs `more`. Do the same trick (press `v`, then `:set shell=/bin/bash` in vi, then `:shell`).
-3.  Run the `bandit27-do` binary to read the password.
+1.  Login to `bandit26` using the key you saved.
+2.  Use the same trick (resize terminal, `v` in more, `:set shell=/bin/bash`, `:shell`) to get a shell.
+3.  Run the binary:
     ```bash
     ./bandit27-do cat /etc/bandit_pass/bandit27
     ```
-4.  Password obtained: `upsNCc7vzaRDx6oZC6GiR6ERwe1MowGB`
-
-### Command Explanation
-*   `bandit27-do`: Special binary to escalate privileges to the next user.
+4.  **Password found:** `upsNCc7vzaRDx6oZC6GiR6ERwe1MowGB`
 
 ---
 
@@ -171,26 +169,23 @@ Login to `bandit26` and run the setuid binary `bandit27-do`. The shell is also r
 ![Level 27 Output](images/bandit27_step.png)
 
 ### Goal
-The password is obtained by cloning a git repository.
+The password is in a **Git repository**.
 
 ### Steps
-1.  The repository is at `ssh://bandit27-git@localhost:2220/home/bandit27-git/repo`.
-2.  User `bandit27-git` cannot login via SSH, but can clone via git.
-3.  Clone the repo to a directory in `/tmp`.
+1.  Create a temporary directory: `mkdir /tmp/myrepo && cd /tmp/myrepo`.
+2.  Clone the repository using the password from the previous level:
     ```bash
-    mkdir /tmp/gitrepo
-    cd /tmp/gitrepo
     git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo
     ```
-4.  Enter the password `upsNCc...` when prompted.
-5.  Read the `README` file.
+3.  Enter password `upsNCc...`.
+4.  Read the `README` file in the cloned repo:
     ```bash
     cat repo/README
     ```
-6.  Password obtained: `Yz9IpL0sBcCeuG7m9uQFt8ZNpS4HZRcN`
+5.  **Password found:** `Yz9IpL0sBcCeuG7m9uQFt8ZNpS4HZRcN`
 
-### Command Explanation
-*   `git clone`: Clones a git repository.
+### Beginner Tip: Git
+Git is a version control system used by developers. `git clone` downloads a complete copy of a repository.
 
 ---
 
@@ -199,19 +194,17 @@ The password is obtained by cloning a git repository.
 ![Level 28 Output](images/bandit28_step.png)
 
 ### Goal
-The password is stored in the git log (commit history).
+The password was deleted from the file, but Git remembers history.
 
 ### Steps
-1.  Clone repo `bandit28-git` (password same as previous level).
-2.  Check git log showing patches.
+1.  Clone the repo `bandit28-git` (password: `Yz9Ip...`).
+2.  Use `git log` to see history.
+3.  Use `git log -p` to see the **patches** (changes) for each commit.
     ```bash
     git log -p
     ```
-3.  Look at the diff of the commit that removed the password.
-4.  Password obtained: `4pT1t5DENaYuqnqvadYs1oE4QLCdjmJ7`
-
-### Command Explanation
-*   `git log -p`: Shows commit logs along with file changes (patches).
+4.  Scroll down to find a commit where `README.md` was changed. You will see the password deleted in red (`-`) or added in green (`+`).
+5.  **Password found:** `4pT1t5DENaYuqnqvadYs1oE4QLCdjmJ7`
 
 ---
 
@@ -220,24 +213,20 @@ The password is stored in the git log (commit history).
 ![Level 29 Output](images/bandit29_step.png)
 
 ### Goal
-The password is stored in a different git branch.
+The password is in a different **branch**.
 
 ### Steps
-1.  Clone repo `bandit29-git`.
-2.  List all branches.
+1.  Clone the repo `bandit29-git`.
+2.  Check for other branches:
     ```bash
     git branch -a
     ```
-3.  Switch to the development branch (`dev` or similar).
+3.  You will see `remotes/origin/dev`. Switch to it:
     ```bash
     git checkout dev
     ```
-4.  Read `README.md`.
-5.  Password obtained: `qp30ex3VLz5MDG1n91YowTv4Q8l7CDZL`
-
-### Command Explanation
-*   `git branch`: Lists branches.
-*   `git checkout`: Switches branches.
+4.  Read `README.md` again.
+5.  **Password found:** `qp30ex3VLz5MDG1n91YowTv4Q8l7CDZL`
 
 ---
 
@@ -246,25 +235,29 @@ The password is stored in a different git branch.
 ![Level 30 Output](images/bandit30_step.png)
 
 ### Goal
-The password is stored in a git tag.
+The password is in a **Git tag**.
 
 ### Steps
-1.  Clone repo `bandit30-git`.
-2.  List tags.
+1.  Clone the repo `bandit30-git`.
+2.  List tags:
     ```bash
     git tag
     ```
-3.  Show the content of tag `secret`.
+3.  You will see a tag named `secret`. Examine it:
     ```bash
     git show secret
     ```
-4.  Password obtained: `fb5S2xb7bRyFmAvQYQGEqsbhVyJqhnDy`
-
-### Command Explanation
-*   `git tag`: Lists tags.
-*   `git show`: Shows details of a git object.
+4.  **Password found:** `fb5S2xb7bRyFmAvQYQGEqsbhVyJqhnDy`
 
 ---
 
 ## Conclusion
-Congratulations! You have solved the Bandit challenges up to Level 31. The next level might involve `git push`, but this guide ends here. Always remember to note down passwords and learn from every new command used.
+You have reached Level 31! The next level involves pushing changes to a remote repository (`git push`), which marks the end of this walkthrough.
+
+**Key Takeways:**
+- **Linux:** Comfortable with standard commands (`ls`, `cd`, `cat`, `grep`, `find`).
+- **Permissions:** Understanding user/group ownership and setuid.
+- **Networking:** Using `ssh`, `nc`, `nmap`, and SSL.
+- **Git:** Basics of cloning, logging, branching, and tagging.
+
+Happy Hacking!

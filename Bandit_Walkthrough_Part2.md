@@ -1,20 +1,24 @@
+# Bandit Wargame Walkthrough (Level 11 - 20)
+
+This guide continues from Level 11. The challenges now involve more complex Linux commands, networking, and permissions.
+
 ## Level 11 -> 12
 
 ![Level 11 Output](images/bandit11_step.png)
 
 ### Goal
-The password is stored in `data.txt`, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions (ROT13).
+The password is stored in `data.txt`, where all letters are rotated by 13 positions (ROT13 encryption).
 
 ### Steps
-1.  Use `cat` to view `data.txt`.
-2.  Use `tr` to perform ROT13 translation (A-Z -> N-Z, A-M, and same for lowercase).
+1.  ROT13 is a simple substitution cipher. 'A' becomes 'N', 'B' becomes 'O', and so on.
+2.  Use the `tr` (translate) command to reverse this.
     ```bash
     cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'
     ```
-3.  Password obtained: `7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4`
+3.  **Password found:** `7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4`
 
 ### Command Explanation
-*   `tr`: Translate characters. `tr 'A-Za-z' 'N-ZA-Mn-za-m'` swaps each letter with the one 13 positions away.
+- `tr 'A-Za-z' 'N-ZA-Mn-za-m'`: Tells `tr` to map every character in the first set (A-Z, a-z) to the corresponding character in the second set (N-Z-A-M, n-z-a-m). This effectively rotates letters by 13.
 
 ---
 
@@ -26,26 +30,28 @@ The password is stored in `data.txt`, where all lowercase (a-z) and uppercase (A
 The password is stored in `data.txt`, which is a hexdump of a file that has been repeatedly compressed.
 
 ### Steps
-1.  Create a working directory in `/tmp` (e.g., `/tmp/yourname123`).
+1.  This level requires creating a workspace because we don't have write permission in the home directory.
     ```bash
-    mkdir /tmp/yoga123 && cp data.txt /tmp/yoga123 && cd /tmp/yoga123
+    mkdir /tmp/mysolution
+    cp data.txt /tmp/mysolution
+    cd /tmp/mysolution
     ```
-2.  Use `xxd -r` to revert the hexdump to binary.
+2.  The file is a hexdump (text representation of binary). Reverse it using `xxd`:
     ```bash
     xxd -r data.txt > data.bin
     ```
-3.  Use `file` to check the compression type (`gzip`, `bzip2`, `tar`).
-4.  Decompress repeatedly based on the file type.
-    *   If gzip: `mv file file.gz` then `gunzip file.gz`.
-    *   If bzip2: `mv file file.bz2` then `bunzip2 file.bz2`.
-    *   If tar: `tar -xMf file`.
-5.  Repeat until you get ASCII text.
-6.  Password obtained (Level 13): `FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn`
-7.  Logout and login as `bandit13`.
+3.  Now check the file type of `data.bin`:
+    ```bash
+    file data.bin
+    ```
+4.  It will be compressed (e.g., gzip, bzip2, or tar). Decompress it repeatedly until you get ASCII text.
+    *   **If gzip:** Rename to `.gz` (`mv file file.gz`) then `gunzip file.gz`.
+    *   **If bzip2:** Rename to `.bz2` (`mv file file.bz2`) then `bunzip2 file.bz2`.
+    *   **If tar:** Use `tar -xvf file`.
+5.  **Password found:** `FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn`
 
-### Command Explanation
-*   `xxd -r`: Converts hexdump back to binary.
-*   `gzip`, `bzip2`, `tar`: Compression/decompression tools.
+### Beginner Tip: Why rename?
+Tools like `gzip` and `bzip2` often refuse to decompress a file unless it has the correct extension (like `.gz`). Renaming it tricks them into working.
 
 ---
 
@@ -54,22 +60,20 @@ The password is stored in `data.txt`, which is a hexdump of a file that has been
 ![Level 13 Output](images/bandit13_step.png)
 
 ### Goal
-The password for the next level is stored in `/etc/bandit_pass/bandit14` and can only be read by user `bandit14`. You are provided with a private SSH key to login as `bandit14` without a password.
+The password for the next level is stored in `/etc/bandit_pass/bandit14`. You are provided with a private SSH key (`sshkey.private`) to login as `bandit14`.
 
 ### Steps
-1.  In the home directory, you will find `sshkey.private`.
-2.  Use this key to login to `bandit14` (localhost).
+1.  Usually, you login with a password. Here, you use a **key file**.
+2.  Use the `-i` flag to specify the key.
     ```bash
     ssh -i sshkey.private bandit14@localhost -p 2220
     ```
-3.  Once logged in, read the password from `/etc/bandit_pass/bandit14`.
+    *Note: We connect to `localhost` because we are already on the server.*
+3.  Once logged in as `bandit14`, read the password file:
     ```bash
     cat /etc/bandit_pass/bandit14
     ```
-4.  Password obtained: `fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq`
-
-### Command Explanation
-*   `-i keyfile`: Specifies the identity file (private key) for SSH authentication.
+4.  **Password found:** `fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq`
 
 ---
 
@@ -78,19 +82,16 @@ The password for the next level is stored in `/etc/bandit_pass/bandit14` and can
 ![Level 14 Output](images/bandit14_step.png)
 
 ### Goal
-The password is retrieved by submitting the password of the current level to port 30000 on localhost.
+Submit the current password to **port 30000** on localhost using `nc` (netcat).
 
 ### Steps
-1.  Use `nc` (netcat) to connect to port 30000.
+1.  Netcat (`nc`) is a tool to read/write network connections.
+2.  Connect to port 30000:
     ```bash
     nc localhost 30000
     ```
-2.  Send the current password (`fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq`).
-3.  The server will respond with the new password.
-4.  Password obtained: `jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt`
-
-### Command Explanation
-*   `nc`: Utility to read and write data across network connections (TCP/UDP).
+3.  Paste the current password (`fGrHPx...`).
+4.  **Password found:** `jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt`
 
 ---
 
@@ -99,19 +100,19 @@ The password is retrieved by submitting the password of the current level to por
 ![Level 15 Output](images/bandit15_step.png)
 
 ### Goal
-The password is retrieved by submitting the password of the current level to port 30001 on localhost using SSL encryption.
+Submit the current password to **port 30001** on localhost using **SSL encryption**.
 
 ### Steps
-1.  Use `openssl s_client` for SSL connection.
+1.  `nc` cannot handle SSL/TLS encryption easily. Use `openssl`.
+2.  Connect using the `s_client` (SSL client) module:
     ```bash
     openssl s_client -connect localhost:30001
     ```
-2.  Send the current password (`jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt`).
-3.  The server responds with the new password.
-4.  Password obtained: `JQttkNJtISi6doDnLC3qFCTCNJ905e6b`
+3.  Paste the current password (`jN2kg...`).
+4.  **Password found:** `JQttkNJtISi6doDnLC3qFCTCNJ905e6b`
 
-### Command Explanation
-*   `openssl s_client`: Generic SSL/TLS client for debugging.
+### Beginner Tip: What is SSL?
+SSL (Secure Sockets Layer) encrypts the connection so no one can eavesdrop. It's the technology behind checkouts and banking (HTTPS).
 
 ---
 
@@ -120,25 +121,28 @@ The password is retrieved by submitting the password of the current level to por
 ![Level 16 Output](images/bandit16_step.png)
 
 ### Goal
-The password is retrieved by submitting the password of the current level to a port between 31000 and 32000 that uses SSL.
+The password is on a port between **31000 and 32000**. We need to find which one is open and supports SSL.
 
 ### Steps
-1.  Scan for open ports using `nmap`.
+1.  Use `nmap` (Network Mapper) to scan the range:
     ```bash
     nmap -p 31000-32000 localhost
     ```
-2.  Find the open port (usually 31790).
-3.  Connect using SSL.
+2.  Identify the open port (usually `31790`).
+3.  Connect using SSL (like the previous level):
     ```bash
     openssl s_client -connect localhost:31790
     ```
-4.  Send the current password. The server will return a new SSH Private Key, not a regular password.
-5.  Save this key to a file (e.g., `key17.private`) and set permissions to 600 (`chmod 600 key17.private`).
-6.  Use the key to login to `bandit17`.
-
-### Command Explanation
-*   `nmap`: Network Mapper, used for port scanning.
-*   `chmod 600`: Sets permissions so only the owner can read/write (required for SSH keys).
+4.  Submit the password. The server returns a **Private Key** (RSA KEY), not a password.
+5.  Copy the key (from `-----BEGIN...` to `...END RSA PRIVATE KEY-----`) and save it to a file on your computer (e.g., `key17.private`).
+6.  **Important:** Keys must be protected. Set permissions to read-only for the owner:
+    ```bash
+    chmod 600 key17.private
+    ```
+7.  Login to Level 17 using this key:
+    ```bash
+    ssh -i key17.private bandit17@bandit.labs.overthewire.org -p 2220
+    ```
 
 ---
 
@@ -147,18 +151,16 @@ The password is retrieved by submitting the password of the current level to a p
 ![Level 17 Output](images/bandit17_step.png)
 
 ### Goal
-The password is stored in a file `passwords.new`, which is the only line that has been changed between `passwords.old` and `passwords.new`.
+The password is the only line that has changed between `passwords.old` and `passwords.new`.
 
 ### Steps
-1.  Use `diff` to compare the two files.
+1.  Use the `diff` command to compare files side-by-side.
     ```bash
     diff passwords.old passwords.new
     ```
-2.  The output shows the difference. The line marked with `>` is the new one.
-3.  Password obtained: `x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO` (example value).
-
-### Command Explanation
-*   `diff`: Compares files line by line.
+2.  Lines starting with `<` are from the first file. Lines with `>` are from the second.
+3.  Identify the new password in the output.
+4.  **Password found:** `x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO` (example)
 
 ---
 
@@ -167,17 +169,16 @@ The password is stored in a file `passwords.new`, which is the only line that ha
 ![Level 18 Output](images/bandit18_step.png)
 
 ### Goal
-The password is stored in a file `readme` in the home directory. However, `.bashrc` is configured to log you out immediately upon login.
+The password is in `readme`. But when you login, you are immediately logged out!
 
 ### Steps
-1.  When running SSH, append the command you want to execute directly at the end. This bypasses the interactive shell startup script.
+1.  The startup script `.bashrc` logs you out. We need to bypass it.
+2.  You can ask SSH to run a command *instead* of starting a shell.
     ```bash
     ssh bandit18@bandit.labs.overthewire.org -p 2220 "cat readme"
     ```
-2.  Password obtained: `cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8`
-
-### Command Explanation
-*   `ssh user@host "cmd"`: Executes a remote command without opening a full interactive shell.
+3.  This runs `cat readme` remotely and shows the output before disconnecting.
+4.  **Password found:** `cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8`
 
 ---
 
@@ -186,18 +187,18 @@ The password is stored in a file `readme` in the home directory. However, `.bash
 ![Level 19 Output](images/bandit19_step.png)
 
 ### Goal
-Use the setuid binary `bandit20-do` to read a password file that cannot be read by the current user.
+Use a binary `bandit20-do` to read the password file.
 
 ### Steps
-1.  The binary `bandit20-do` runs with `bandit20` privileges.
-2.  Use it to read the password file.
+1.  Run the binary to see how it works: `./bandit20-do`. It runs commands as another user (`bandit20`).
+2.  Use it to read the password file `/etc/bandit_pass/bandit20`.
     ```bash
     ./bandit20-do cat /etc/bandit_pass/bandit20
     ```
-3.  Password obtained: `0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO`
+3.  **Password found:** `0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO`
 
-### Command Explanation
-*   `setuid`: A special bit on binary files that allows users to run the file with the permissions of the file owner (in this case, `bandit20`).
+### Beginner Tip: Setuid
+Files with the "Setuid" bit set run with the permissions of the **file owner**, not the user running it. This allows regular users to perform specific administrative tasks securely.
 
 ---
 
@@ -206,21 +207,20 @@ Use the setuid binary `bandit20-do` to read a password file that cannot be read 
 ![Level 20 Output](images/bandit20_step.png)
 
 ### Goal
-The setuid binary `suconnect` will connect to a local port and verify the current password before giving the new one.
+The `suconnect` binary connects to a port you specify and expects to receive the current password.
 
 ### Steps
-1.  Run `nc` (netcat) as a listener in one terminal (or in background).
-    ```bash
-    echo -n 'CURRENT_PASSWORD' | nc -l -p 1234 &
-    ```
-2.  Run `./suconnect` pointing to that port.
-    ```bash
-    ./suconnect 1234
-    ```
-3.  `suconnect` connects to your listener, verifies the password you sent, and sends back the new password.
-4.  Password obtained: `EeoULMCra2q0dSkYj561DX7s1CpBuOBt`
-
-### Command Explanation
-*   `nc -l -p`: Listen mode on a specific port.
+1.  You need two terminals (or use background `&`).
+2.  **Steps:**
+    *   Set up a listener on port 1234 that sends the password:
+        ```bash
+        echo -n '0qXahG...YO' | nc -l -p 1234 &
+        ```
+    *   Run the binary to connect to your listener:
+        ```bash
+        ./suconnect 1234
+        ```
+3.  The binary connects to your `nc`, reads the password, verifies it, and sends back the new password.
+4.  **Password found:** `EeoULMCra2q0dSkYj561DX7s1CpBuOBt`
 
 ---

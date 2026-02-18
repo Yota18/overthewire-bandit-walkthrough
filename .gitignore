@@ -1,6 +1,25 @@
+# Sensitive Files
 *.exp
 *.key
+*.private
+id_rsa
+id_rsa.pub
+
+# Temporary Directories & Files
 repo_*/
 __pycache__/
-*.py
+*.pyc
+.DS_Store
 .venv/
+venv/
+*.log
+*.tmp
+/tmp/
+
+# User Scripts (Optional: Keep if you want to share them)
+# *.py
+# *.sh
+
+# Keep Markdown and Images
+!*.md
+!images/
