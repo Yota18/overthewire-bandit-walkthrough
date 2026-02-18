@@ -23,6 +23,8 @@ Log in to the game using SSH. The host to contact is `bandit.labs.overthewire.or
 
 ## Level 0 -> 1
 
+![Level 0 Output](bandit0_step.png)
+
 ### Goal
 The password for the next level is stored in a file called `readme` located in the home directory.
 
@@ -43,6 +45,8 @@ The password for the next level is stored in a file called `readme` located in t
 
 ## Level 1 -> 2
 
+![Level 1 Output](bandit1_step.png)
+
 ### Goal
 The password is stored in a file named `-` located in the home directory.
 
@@ -61,6 +65,8 @@ The password is stored in a file named `-` located in the home directory.
 ---
 
 ## Level 2 -> 3
+
+![Level 2 Output](bandit2_step.png)
 
 ### Goal
 The password is stored in a file named `spaces in this filename` located in the home directory.
@@ -85,6 +91,8 @@ The password is stored in a file named `spaces in this filename` located in the 
 ---
 
 ## Level 3 -> 4
+
+![Level 3 Output](bandit3_step.png)
 
 ### Goal
 The password is stored in a hidden file in the `inhere` directory.
@@ -112,6 +120,8 @@ The password is stored in a hidden file in the `inhere` directory.
 
 ## Level 4 -> 5
 
+![Level 4 Output](bandit4_step.png)
+
 ### Goal
 The password is stored in the `inhere` directory and has the following properties: human-readable, 1033 bytes in size, not executable.
 
@@ -135,6 +145,8 @@ The password is stored in the `inhere` directory and has the following propertie
 
 ## Level 5 -> 6
 
+![Level 5 Output](bandit5_step.png)
+
 ### Goal
 The password is stored in `inhere` directory with the following properties: human-readable, 1033 bytes in size, not executable.
 
@@ -157,6 +169,8 @@ The password is stored in `inhere` directory with the following properties: huma
 ---
 
 ## Level 6 -> 7
+
+![Level 6 Output](bandit6_step.png)
 
 ### Goal
 The password is stored somewhere on the server and has all of the following properties: owned by user `bandit7`, owned by group `bandit6`, 33 bytes in size.
@@ -182,6 +196,8 @@ The password is stored somewhere on the server and has all of the following prop
 
 ## Level 7 -> 8
 
+![Level 7 Output](bandit7_step.png)
+
 ### Goal
 The password is stored in `data.txt` next to the word "millionth".
 
@@ -198,6 +214,8 @@ The password is stored in `data.txt` next to the word "millionth".
 ---
 
 ## Level 8 -> 9
+
+![Level 8 Output](bandit8_step.png)
 
 ### Goal
 The password is stored in `data.txt` and is the only line of text that occurs only once.
@@ -218,6 +236,8 @@ The password is stored in `data.txt` and is the only line of text that occurs on
 
 ## Level 9 -> 10
 
+![Level 9 Output](bandit9_step.png)
+
 ### Goal
 The password is stored in `data.txt` in one of the few human-readable strings, preceded by several `=` characters.
 
@@ -236,6 +256,8 @@ The password is stored in `data.txt` in one of the few human-readable strings, p
 ---
 
 ## Level 10 -> 11
+
+![Level 10 Output](bandit10_step.png)
 
 ### Goal
 The password is stored in `data.txt`, which contains base64 encoded data.
