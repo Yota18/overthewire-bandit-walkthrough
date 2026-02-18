@@ -38,4 +38,3 @@ The guide is split into three parts for easier reading:
 These writeups are for **educational purposes only**. The goal is to learn Linux and security concepts. Please try to solve the levels yourself before consulting the solutions!
 
 ---
-**Happy Hacking!**
