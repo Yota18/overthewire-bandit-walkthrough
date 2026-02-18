@@ -1,6 +1,6 @@
 ## Level 21 -> 22
 
-![Level 21 Output](bandit21_step.png)
+![Level 21 Output](images/bandit21_step.png)
 
 ### Goal
 The password for the next level can be obtained by examining a running cron job.
@@ -28,7 +28,7 @@ The password for the next level can be obtained by examining a running cron job.
 
 ## Level 22 -> 23
 
-![Level 22 Output](bandit22_step.png)
+![Level 22 Output](images/bandit22_step.png)
 
 ### Goal
 The password is stored in a temporary file whose name is generated from the MD5 hash of the target username.
@@ -57,7 +57,7 @@ The password is stored in a temporary file whose name is generated from the MD5 
 
 ## Level 23 -> 24
 
-![Level 23 Output](bandit23_step.png)
+![Level 23 Output](images/bandit23_step.png)
 
 ### Goal
 The password is stored in `/etc/bandit_pass/bandit24`. We need to create our own script that will be executed by the `bandit24` cron job.
@@ -92,7 +92,7 @@ The password is stored in `/etc/bandit_pass/bandit24`. We need to create our own
 
 ## Level 24 -> 25
 
-![Level 24 Output](bandit24_step.png)
+![Level 24 Output](images/bandit24_step.png)
 
 ### Goal
 The password is stored by a daemon listening on port 30002. The daemon asks for the `bandit24` password and a secret 4-digit PIN.
@@ -116,7 +116,7 @@ The password is stored by a daemon listening on port 30002. The daemon asks for 
 
 ## Level 25 -> 26
 
-![Level 25 Output](bandit25_step.png)
+![Level 25 Output](images/bandit25_step.png)
 
 ### Goal
 Login to `bandit25`. The shell is `/usr/bin/showtext`, which is restricted.
@@ -144,7 +144,7 @@ Login to `bandit25`. The shell is `/usr/bin/showtext`, which is restricted.
 
 ## Level 26 -> 27
 
-![Level 26 Output](bandit26_step.png)
+![Level 26 Output](images/bandit26_step.png)
 
 ### Goal
 Login to `bandit26` and run the setuid binary `bandit27-do`. The shell is also restricted.
@@ -168,7 +168,7 @@ Login to `bandit26` and run the setuid binary `bandit27-do`. The shell is also r
 
 ## Level 27 -> 28
 
-![Level 27 Output](bandit27_step.png)
+![Level 27 Output](images/bandit27_step.png)
 
 ### Goal
 The password is obtained by cloning a git repository.
@@ -196,7 +196,7 @@ The password is obtained by cloning a git repository.
 
 ## Level 28 -> 29
 
-![Level 28 Output](bandit28_step.png)
+![Level 28 Output](images/bandit28_step.png)
 
 ### Goal
 The password is stored in the git log (commit history).
@@ -217,7 +217,7 @@ The password is stored in the git log (commit history).
 
 ## Level 29 -> 30
 
-![Level 29 Output](bandit29_step.png)
+![Level 29 Output](images/bandit29_step.png)
 
 ### Goal
 The password is stored in a different git branch.
@@ -243,7 +243,7 @@ The password is stored in a different git branch.
 
 ## Level 30 -> 31
 
-![Level 30 Output](bandit30_step.png)
+![Level 30 Output](images/bandit30_step.png)
 
 ### Goal
 The password is stored in a git tag.

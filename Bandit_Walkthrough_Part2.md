@@ -1,6 +1,6 @@
 ## Level 11 -> 12
 
-![Level 11 Output](bandit11_step.png)
+![Level 11 Output](images/bandit11_step.png)
 
 ### Goal
 The password is stored in `data.txt`, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions (ROT13).
@@ -20,7 +20,7 @@ The password is stored in `data.txt`, where all lowercase (a-z) and uppercase (A
 
 ## Level 12 -> 13
 
-![Level 12 Output](bandit12_step.png)
+![Level 12 Output](images/bandit12_step.png)
 
 ### Goal
 The password is stored in `data.txt`, which is a hexdump of a file that has been repeatedly compressed.
@@ -51,7 +51,7 @@ The password is stored in `data.txt`, which is a hexdump of a file that has been
 
 ## Level 13 -> 14
 
-![Level 13 Output](bandit13_step.png)
+![Level 13 Output](images/bandit13_step.png)
 
 ### Goal
 The password for the next level is stored in `/etc/bandit_pass/bandit14` and can only be read by user `bandit14`. You are provided with a private SSH key to login as `bandit14` without a password.
@@ -75,7 +75,7 @@ The password for the next level is stored in `/etc/bandit_pass/bandit14` and can
 
 ## Level 14 -> 15
 
-![Level 14 Output](bandit14_step.png)
+![Level 14 Output](images/bandit14_step.png)
 
 ### Goal
 The password is retrieved by submitting the password of the current level to port 30000 on localhost.
@@ -96,7 +96,7 @@ The password is retrieved by submitting the password of the current level to por
 
 ## Level 15 -> 16
 
-![Level 15 Output](bandit15_step.png)
+![Level 15 Output](images/bandit15_step.png)
 
 ### Goal
 The password is retrieved by submitting the password of the current level to port 30001 on localhost using SSL encryption.
@@ -117,7 +117,7 @@ The password is retrieved by submitting the password of the current level to por
 
 ## Level 16 -> 17
 
-![Level 16 Output](bandit16_step.png)
+![Level 16 Output](images/bandit16_step.png)
 
 ### Goal
 The password is retrieved by submitting the password of the current level to a port between 31000 and 32000 that uses SSL.
@@ -144,7 +144,7 @@ The password is retrieved by submitting the password of the current level to a p
 
 ## Level 17 -> 18
 
-![Level 17 Output](bandit17_step.png)
+![Level 17 Output](images/bandit17_step.png)
 
 ### Goal
 The password is stored in a file `passwords.new`, which is the only line that has been changed between `passwords.old` and `passwords.new`.
@@ -164,7 +164,7 @@ The password is stored in a file `passwords.new`, which is the only line that ha
 
 ## Level 18 -> 19
 
-![Level 18 Output](bandit18_step.png)
+![Level 18 Output](images/bandit18_step.png)
 
 ### Goal
 The password is stored in a file `readme` in the home directory. However, `.bashrc` is configured to log you out immediately upon login.
@@ -183,7 +183,7 @@ The password is stored in a file `readme` in the home directory. However, `.bash
 
 ## Level 19 -> 20
 
-![Level 19 Output](bandit19_step.png)
+![Level 19 Output](images/bandit19_step.png)
 
 ### Goal
 Use the setuid binary `bandit20-do` to read a password file that cannot be read by the current user.
@@ -203,7 +203,7 @@ Use the setuid binary `bandit20-do` to read a password file that cannot be read 
 
 ## Level 20 -> 21
 
-![Level 20 Output](bandit20_step.png)
+![Level 20 Output](images/bandit20_step.png)
 
 ### Goal
 The setuid binary `suconnect` will connect to a local port and verify the current password before giving the new one.
